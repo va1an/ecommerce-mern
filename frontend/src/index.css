@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primaryButton: #2563EB;
+  --color-primaryHover: #1D4ED8;
+  --color-secondaryButton: #F97316;
+  --color-secondaryHover: #EA580C;
+  --color-textPrimary: #111827;
+  --color-textSecondary: #6B7280;
+  --color-cardBackground: #FFFFFF;
+  --color-background: #F8FAFC;
+  --color-border: #F8FAFC;
+
+  --font-inter: Inter, sans-serif;
+}
