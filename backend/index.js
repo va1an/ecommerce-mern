@@ -7,6 +7,7 @@ import authRouter from './routes/authRoutes.js';
 import productRouter from './routes/productRoutes.js';
 import categoryRouter from './routes/categoryRoutes.js';
 import orderRouter from "./routes/orderRoutes.js";
+import cartRouter from "./routes/cartRoutes.js";
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/product", productRouter);
 app.use("/api/category", categoryRouter);
 app.use("/api/order", orderRouter);
+app.use("/api/cart", cartRouter);
 
 const PORT = process.env.PORT || 8000;
 const MONGOURL = process.env.MONGO_URL;
