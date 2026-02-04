@@ -16,6 +16,7 @@ import ProductForm from "./pages/admin/ProductForm"
 import AdminCategories from "./pages/admin/AdminCategories"
 import Products from "./pages/Products"
 import MainLayout from "./layouts/MainLayout"
+import ProductDetails from "./pages/ProductDetails"
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="products" element={<Products />} />
+          <Route path="product/:id" element={<ProductDetails />} />
         </Route>
 
         <Route path="login" element={<Login />} />

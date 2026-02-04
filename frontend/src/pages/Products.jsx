@@ -3,12 +3,15 @@ import toast from "react-hot-toast";
 import { getAllProducts } from "../api/product";
 import { getCategories } from "../api/category";
 import Spinner from "../components/Spinner";
+import { useNavigate } from "react-router-dom";
 
 export default function Products() {
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState("");
     const [loading, setLoading] = useState(true);
+
+    const navigate = useNavigate();
 
     async function fetchData() {
         try {
@@ -55,7 +58,7 @@ export default function Products() {
                                     <img src={product.images?.[0]?.url} alt={product.name} className="w-full h-48 object-cover rounded mb-3" />
                                     <h3 className="font-inter font-semibold">{product.name}</h3>
                                     <p className="font-inter text-lg font-bold mb-2">₹{product.price}</p>
-                                    <button className="w-full bg-primaryButton hover:bg-primaryHover text-white py-2 px-4 rounded cursor-pointer">Add to Cart</button>
+                                    <button onClick={() => navigate(`/product/${product._id}`)} className="w-full bg-primaryButton hover:bg-primaryHover text-white py-2 px-4 rounded cursor-pointer">Add to Cart</button>
                                 </div>
                             ))}
                         </div>
