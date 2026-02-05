@@ -17,6 +17,9 @@ import AdminCategories from "./pages/admin/AdminCategories"
 import Products from "./pages/Products"
 import MainLayout from "./layouts/MainLayout"
 import ProductDetails from "./pages/ProductDetails"
+import UserProtectedRoutes from "./components/UserProtectedRoutes"
+import Cart from "./pages/Cart"
+import Checkout from "./pages/Checkout"
 
 
 function App() {
@@ -27,6 +30,10 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="products" element={<Products />} />
           <Route path="product/:id" element={<ProductDetails />} />
+          <Route element={<UserProtectedRoutes />}>
+            <Route path="cart" element={<Cart />} />
+            <Route path="checkout" element={<Checkout />} />
+          </Route>
         </Route>
 
         <Route path="login" element={<Login />} />

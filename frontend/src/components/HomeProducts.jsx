@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import ProductCard from "../components/ProductCard";
 
 export default function HomeProducts() {
     const navigate = useNavigate();
@@ -39,12 +40,7 @@ export default function HomeProducts() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
                 {products.map(product => (
-                    <div key={product.id} className="bg-white rounded-xl shadow p-4 flex flex-col items-center">
-                        <img src={product.image} alt={product.name} className="rounded-lg mb-4" />
-                        <h3 className="font-inter font-semibold">{product.name}</h3>
-                        <p className="text-lg font-inter font-bold mb-3">{product.price}</p>
-                        <button className="w-full bg-blue-600 text-white py-2 rounded-lg cursor-pointer font-inter">Add to Cart</button>
-                    </div>
+                    <ProductCard key={product.id} product={product} />
                 ))}
             </div>
         </section>

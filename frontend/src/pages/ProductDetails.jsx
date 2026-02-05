@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import { useParams } from "react-router-dom"
 import { getProductById } from "../api/product";
 import Spinner from "../components/Spinner";
+import api from "../api/axios";
 
 export default function ProductDetails() {
     const { id } = useParams();
@@ -26,13 +27,19 @@ export default function ProductDetails() {
         }
     }
 
+    async function handleAddToCart() {
+        try {
+            await api.post("/cart/add", { productId: product._id, quantity: qty });
+            toast.success("Added to cart");
+        }
+        catch (error) {
+            toast.error("Failed to add to cart")
+        }
+    }
+
     useEffect(() => {
         fetchProduct();
     }, [id]);
-
-    function handleAddToCart() {
-        toast.success("Added to cart");
-    }
 
     if (loading) return <Spinner />
     if (!product) return <p>Product not found...</p>

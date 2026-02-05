@@ -27,7 +27,7 @@ export default function Navbar() {
             </div>
 
             <div className="flex items-center gap-4">
-                <ShoppingCart />
+                <ShoppingCart onClick={() => navigate("/cart")} />
                 {user ? <button onClick={handleLogout} className="bg-red-500 px-4 py-2 rounded-lg cursor-pointer text-white font-inter">Logout</button> : <button onClick={() => navigate('/login')} className="bg-blue-500 rounded-lg cursor-pointer font-inter text-white px-4 py-2">Login</button>}
                 {user ? <button onClick={() => navigate('/register')} className="bg-gray-500 px-4 py-2 rounded-lg font-inter text-white cursor-pointer">Profile</button> : <button onClick={() => navigate('/register')} className="bg-blue-500 rounded-lg cursor-pointer font-inter text-white px-4 py-2">Register</button>}
             </div>
