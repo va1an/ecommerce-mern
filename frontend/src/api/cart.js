@@ -5,9 +5,9 @@ export const getCart = () => {
 }
 
 export const updateCartItem = (productId, quantity) => {
-    return api.put(`/cart/${productId}`, { quantity })
+    return api.put(`/cart/update/${productId}`, { quantity })
 }
 
 export const removeCartItem = (productId) => {
-    return api.delete(`/cart/${productId}`);
+    return api.delete(`/cart/remove/${productId}`);
 }

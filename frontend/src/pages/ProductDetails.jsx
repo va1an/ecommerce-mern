@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom"
 import { getProductById } from "../api/product";
 import Spinner from "../components/Spinner";
 import api from "../api/axios";
+import { useCart } from "../context/CartContext";
 
 export default function ProductDetails() {
     const { id } = useParams();
@@ -12,6 +13,8 @@ export default function ProductDetails() {
     const [selectedImage, setSelectedImage] = useState("");
     const [qty, setqty] = useState(1);
     const [loading, setLoading] = useState(true);
+
+    const { addToCart } = useCart();
 
     async function fetchProduct() {
         try {
@@ -29,8 +32,8 @@ export default function ProductDetails() {
 
     async function handleAddToCart() {
         try {
-            await api.post("/cart/add", { productId: product._id, quantity: qty });
-            toast.success("Added to cart");
+            await addToCart(product._id, qty);
+            toast.success("Added to cart")
         }
         catch (error) {
             toast.error("Failed to add to cart")
