@@ -20,6 +20,10 @@ import ProductDetails from "./pages/ProductDetails"
 import UserProtectedRoutes from "./components/UserProtectedRoutes"
 import Cart from "./pages/Cart"
 import Checkout from "./pages/Checkout"
+import OrderSuccess from "./pages/OrderSuccess"
+import MyOrders from "./pages/MyOrders"
+import Profile from "./pages/Profile"
+import OrderDetails from "./pages/OrderDetails"
 
 
 function App() {
@@ -33,6 +37,10 @@ function App() {
           <Route element={<UserProtectedRoutes />}>
             <Route path="cart" element={<Cart />} />
             <Route path="checkout" element={<Checkout />} />
+            <Route path="order-success" element={<OrderSuccess />} />
+            <Route path="profile" element={<Profile />} />
+            <Route path="profile/orders" element={<MyOrders />} />
+            <Route path="profile/orders/:id" element={<OrderDetails />} />
           </Route>
         </Route>
 

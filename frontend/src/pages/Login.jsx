@@ -7,6 +7,7 @@ import { loginUser } from "../api/auth";
 import { useAuth } from "../context/AuthContext";
 import { setAccessToken } from "../utils/token";
 import { useNavigate } from "react-router-dom";
+import { useCart } from "../context/CartContext";
 
 export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
@@ -14,6 +15,7 @@ export default function Login() {
     const [password, setPassword] = useState("");
     const { user, login } = useAuth();
     const navigate = useNavigate();
+    const { fetchCart } = useCart();
 
     async function handleSubmit() {
         try {
@@ -21,6 +23,7 @@ export default function Login() {
             const loggedInUser = res.data.user;
             login(loggedInUser, res.data.accessToken);
             setAccessToken(res.data.accessToken);
+            fetchCart();
             if (loggedInUser.role === 'admin') {
                 navigate('/admin/dashboard');
             }

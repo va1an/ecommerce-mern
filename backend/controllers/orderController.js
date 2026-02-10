@@ -1,15 +1,21 @@
 import Order from "../models/orderModel.js";
 import Product from "../models/productModel.js";
+import Cart from "../models/cartModel.js";
 
 export const createOrder = async (req, res) => {
     try {
-        const { items, shippingAddress, paymentMethod, itemsPrice, shippingPrice, taxPrice, totalPrice } = req.body;
+        const userId = req.user._id;
+        const { shippingAddress, paymentMethod } = req.body;
 
-        if (!items || items.length === 0) {
+        const cart = await Cart.findOne({ user: userId }).populate("items.product")
+
+        if (!cart || cart.items.length === 0) {
             return res.status(400).json({ message: "No order items" });
         }
 
-        for (const item of items) {
+        const totalPrice = cart.items.reduce((total, item) => total + item.product.price * item.quantity, 0);
+
+        for (const item of cart.items) {
             const product = await Product.findById(item.product)
 
             if (!product || product.stock < item.quantity) {
@@ -20,8 +26,10 @@ export const createOrder = async (req, res) => {
             await product.save();
         }
 
-        const order = await Order.create({ user: req.user._id, items, shippingAddress, paymentMethod, itemsPrice, shippingPrice, taxPrice, totalPrice });
-        res.status(201).json(order);
+        const order = await Order.create({ user: req.user._id, items: cart.items, totalPrice, shippingAddress, paymentMethod });
+        cart.items = [];
+        await cart.save();
+        res.status(201).json({ order });
     }
     catch (error) {
         res.status(500).json({ errorMessage: error.message });
@@ -31,7 +39,7 @@ export const createOrder = async (req, res) => {
 export const getMyOrders = async (req, res) => {
     try {
         const orders = await Order.find({ user: req.user._id }).sort({ createdAt: -1 });
-        res.status(200).json(orders);
+        res.status(200).json({ orders });
     }
     catch (error) {
         res.status(500).json({ errorMessage: error.message });
@@ -41,7 +49,7 @@ export const getMyOrders = async (req, res) => {
 export const getAllOrders = async (req, res) => {
     try {
         const orders = await Order.find().populate("user", "name email").sort({ createdAt: -1 });
-        res.json(orders);
+        res.json({ orders });
     }
     catch (error) {
         res.status(500).json({ errorMessage: error.message });
@@ -50,13 +58,13 @@ export const getAllOrders = async (req, res) => {
 
 export const getOrderById = async (req, res) => {
     try {
-        const order = await Order.findById(req.params.id).populate("user", "name email").populate("items.product", "name price");
+        const order = await Order.findById(req.params.id).populate("user", "name email").populate("items.product", "name price images");
 
         if (!order) {
             return res.status(400).json({ message: "Order not found" });
         }
 
-        res.json(order);
+        res.json({ order });
     }
     catch (error) {
         res.status(500).json({ errorMessage: error.message });
