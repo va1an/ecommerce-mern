@@ -1,16 +1,25 @@
 import Order from "../models/orderModel.js";
 import Product from "../models/productModel.js";
 import Cart from "../models/cartModel.js";
+import Address from "../models/addressModel.js";
+import User from "../models/userModel.js";
 
 export const createOrder = async (req, res) => {
     try {
         const userId = req.user._id;
+        const { addressId } = req.body;
         const { shippingAddress, paymentMethod } = req.body;
 
         const cart = await Cart.findOne({ user: userId }).populate("items.product")
 
         if (!cart || cart.items.length === 0) {
             return res.status(400).json({ message: "No order items" });
+        }
+
+        const address = await Address.findById(addressId);
+
+        if (!address) {
+            return res.status(404).json({ message: "Address not found" });
         }
 
         const totalPrice = cart.items.reduce((total, item) => total + item.product.price * item.quantity, 0);
@@ -26,7 +35,7 @@ export const createOrder = async (req, res) => {
             await product.save();
         }
 
-        const order = await Order.create({ user: req.user._id, items: cart.items, totalPrice, shippingAddress, paymentMethod });
+        const order = await Order.create({ user: req.user._id, items: cart.items, totalPrice, shippingAddress: { fullName: address.fullName, phone: address.phone, address: address.addressLine1, city: address.city, state: address.state, postalCode: address.pincode, country: address.country }, paymentMethod });
         cart.items = [];
         await cart.save();
         res.status(201).json({ order });
@@ -48,7 +57,7 @@ export const getMyOrders = async (req, res) => {
 
 export const getAllOrders = async (req, res) => {
     try {
-        const orders = await Order.find().populate("user", "name email").sort({ createdAt: -1 });
+        const orders = await Order.find().populate("user", "name email").populate({ path: "items.product", select: "name images price" }).sort({ createdAt: -1 });
         res.json({ orders });
     }
     catch (error) {
@@ -86,9 +95,10 @@ export const updateOrderStatus = async (req, res) => {
         }
 
         await order.save();
-        res.status(200).json(order);
+        res.status(200).json({ order });
     }
     catch (error) {
         res.status(500).json({ errorMessage: error.message });
     }
 }
+

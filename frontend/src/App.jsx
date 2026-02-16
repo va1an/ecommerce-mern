@@ -24,6 +24,8 @@ import OrderSuccess from "./pages/OrderSuccess"
 import MyOrders from "./pages/MyOrders"
 import Profile from "./pages/Profile"
 import OrderDetails from "./pages/OrderDetails"
+import ProfileInfo from "./components/ProfileInfo"
+import Addresses from "./pages/Addresses"
 
 
 function App() {
@@ -38,9 +40,12 @@ function App() {
             <Route path="cart" element={<Cart />} />
             <Route path="checkout" element={<Checkout />} />
             <Route path="order-success" element={<OrderSuccess />} />
-            <Route path="profile" element={<Profile />} />
-            <Route path="profile/orders" element={<MyOrders />} />
-            <Route path="profile/orders/:id" element={<OrderDetails />} />
+            <Route path="profile" element={<Profile />}>
+              <Route index element={<ProfileInfo />} />
+              <Route path="orders" element={<MyOrders />} />
+              <Route path="orders/:id" element={<OrderDetails />} />
+              <Route path="addresses" element={<Addresses />} />
+            </Route>
           </Route>
         </Route>
 

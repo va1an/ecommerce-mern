@@ -1,12 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import api from "../api/axios";
+import { getAddresses } from "../api/address";
 
 export default function Checkout() {
     const { cart, fetchCart } = useCart();
     const navigate = useNavigate();
+    const [addresses, setAddresses] = useState([]);
+    const [selectedAddress, setSelectedAddress] = useState("");
 
     const [form, setForm] = useState({
         fullName: "",
@@ -22,19 +25,28 @@ export default function Checkout() {
         setForm({ ...form, [e.target.name]: e.target.value });
     }
 
+    async function fetchAddresses() {
+        try {
+            const res = await getAddresses();
+            setAddresses(res.data.addresses);
+
+            const defaultAddress = res.data.addresses.find(a => a.isDefault);
+
+            if (defaultAddress) {
+                setSelectedAddress(defaultAddress._id);
+            }
+        }
+        catch (error) {
+            toast.error("Failed to fetch address");
+        }
+    }
+
     const totalPrice = cart.reduce((total, item) => total + item.product.price * item.quantity, 0);
 
     async function handlePlaceOrder() {
         try {
             const payload = {
-                shippingAddress: {
-                    fullName: form.fullName,
-                    phone: form.phone,
-                    address: form.address,
-                    city: form.city,
-                    state: form.state,
-                    pincode: form.pincode
-                },
+                addressId: selectedAddress,
                 paymentMethod: form.paymentMethod
             }
 
@@ -48,17 +60,30 @@ export default function Checkout() {
         }
     }
 
+    useEffect(() => {
+        fetchAddresses();
+    }, [])
+
     return (
         <div className="max-w-6xl mx-auto p-6 grid md:grid-cols-2 gap-10">
-            <div className="space-y-3">
-                <h2 className="font-inter text-2xl font-bold">Shipping Address</h2>
+            <div >
+                <h2 className="font-inter text-2xl font-bold mb-2">Shipping Address</h2>
 
-                <input type="text" name="fullName" placeholder="Full Name" onChange={handleChange} className="font-inter border border-gray-300 w-full p-2 focus:ring-2 focus:ring-primaryButton outline-none rounded" />
-                <input type="text" name="phone" placeholder="Phone" onChange={handleChange} className="font-inter border border-gray-300 w-full p-2 focus:ring-2 focus:ring-primaryButton outline-none rounded" />
-                <input type="text" name="address" placeholder="Address" onChange={handleChange} className="font-inter border border-gray-300 w-full p-2 focus:ring-2 focus:ring-primaryButton outline-none rounded" />
-                <input type="text" name="city" placeholder="City" onChange={handleChange} className="font-inter border border-gray-300 w-full p-2 focus:ring-2 focus:ring-primaryButton outline-none rounded" />
-                <input type="text" name="state" placeholder="State" onChange={handleChange} className="font-inter border border-gray-300 w-full p-2 focus:ring-2 focus:ring-primaryButton outline-none rounded" />
-                <input type="text" name="pincode" placeholder="Pincode" onChange={handleChange} className="font-inter border border-gray-300 w-full p-2 focus:ring-2 focus:ring-primaryButton outline-none rounded" />
+                {addresses.length === 0 ? (
+                    <div className="border p-4 rounded text-center">
+                        <p className="font-inter mb-3">You don't have any address yet</p>
+                        <button className="font-inter bg-primaryButton hover:bg-primaryHover text-white px-4 py-2 cursor-pointer rounded">Add Address</button>
+                    </div>
+                ) : (
+                    addresses.map(addr => (
+                        <div key={addr._id} onClick={() => setSelectedAddress(addr._id)} className={`border p-4 rounded cursor-pointer ${selectedAddress === addr._id ? "border-blue-500" : ""}`}>
+                            <p className="font-inter font-semibold">{addr.fullName}</p>
+                            <p className="font-inter">{addr.addressLine1}, {addr.city}</p>
+                            <p className="font-inter">{addr.phone}</p>
+                        </div>
+                    )))}
+
+                <h3 className="mt-10 mb-2 font-inter font-semibold">Payment Method:</h3>
                 <select name="paymentMethod" onChange={handleChange} className="font-inter border border-gray-300 w-full p-2 focus:ring-2 focus:ring-primaryButton outline-none rounded">
                     <option value="COD">Cash On Delivery</option>
                     <option value="ONLINE">Online Payment</option>
