@@ -26,7 +26,7 @@ export default function ProductForm() {
         try {
             setLoading(true);
             const res = await getProductById(id);
-            const product = res.data;
+            const product = res.data.product;
 
             setFormData({
                 name: product.name,

@@ -1,4 +1,4 @@
-import { LayoutDashboard, Package, ShoppingCart, Users, BarChart, Settings, LogOut, Tag } from 'lucide-react';
+import { LayoutDashboard, Package, ShoppingCart, LogOut, Tag } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { logoutUser } from '../api/auth';
@@ -25,9 +25,6 @@ export default function AdminSidebar() {
                 <NavLink to={'/admin/categories'} className={({ isActive }) => `flex items-center gap-3 px-4 py-2 rounded-lg cursor-pointer ${isActive ? "bg-gray-600 text-white" : "hover:bg-gray-800 text-gray-200"}`}><Tag />Categories</NavLink>
                 <NavLink to={'/admin/products'} className={({ isActive }) => `flex items-center gap-3 px-4 py-2 rounded-lg cursor-pointer ${isActive ? "bg-gray-600 text-white" : "hover:bg-gray-800 text-gray-200"}`}><Package />Products</NavLink>
                 <NavLink to={'/admin/orders'} className={({ isActive }) => `flex items-center gap-3 px-4 py-2 rounded-lg cursor-pointer ${isActive ? "bg-gray-600 text-white" : "hover:bg-gray-800 text-gray-200"}`}><ShoppingCart />Orders</NavLink>
-                <NavLink to={'/admin/users'} className={({ isActive }) => `flex items-center gap-3 px-4 py-2 rounded-lg cursor-pointer ${isActive ? "bg-gray-600 text-white" : "hover:bg-gray-800 text-gray-200"}`}><Users />Users</NavLink>
-                <NavLink to={'/admin/analytics'} className={({ isActive }) => `flex items-center gap-3 px-4 py-2 rounded-lg cursor-pointer ${isActive ? "bg-gray-600 text-white" : "hover:bg-gray-800 text-gray-200"}`}><BarChart />Analytics</NavLink>
-                <NavLink to={'/admin/settings'} className={({ isActive }) => `flex items-center gap-3 px-4 py-2 rounded-lg cursor-pointer ${isActive ? "bg-gray-600 text-white" : "hover:bg-gray-800 text-gray-200"}`}><Settings />Settings</NavLink>
             </nav>
 
             <div className='px-4 py-4 border-t border-gray-800'>

@@ -21,7 +21,7 @@ export default function Products() {
                 getCategories()
             ]);
 
-            setProducts(productRes.data.products);
+            setProducts(productRes.data.data);
             setCategories(categoryRes.data.categories);
         }
         catch (error) {

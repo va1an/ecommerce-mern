@@ -5,8 +5,9 @@ import { deleteProduct, getAllProducts } from "../api/product";
 import { Edit, Trash2 } from 'lucide-react';
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
 import Spinner from "./Spinner";
+import Pagination from "./Pagination";
 
-export default function AdminProductsTable() {
+export default function AdminProductsTable({ setPage, setTotalPages }) {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [openModal, setOpenModal] = useState(false);
@@ -15,8 +16,10 @@ export default function AdminProductsTable() {
 
     async function fetchProducts() {
         try {
-            const res = await getAllProducts();
-            setProducts(res.data.products);
+            const { data } = await getAllProducts();
+            setProducts(data.data);
+            setPage(data.currentPage);
+            setTotalPages(data.totalPages);
         }
         catch (error) {
             toast.error("Failed to load products")

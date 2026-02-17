@@ -1,35 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import ProductCard from "../components/ProductCard";
 
-export default function HomeProducts() {
+export default function HomeProducts({ products }) {
     const navigate = useNavigate();
-
-    const products = [
-        {
-            id: 1,
-            name: "Wireless Headphones",
-            price: 99,
-            image: "https://placehold.co/300",
-        },
-        {
-            id: 2,
-            name: "Nike Running Shoes",
-            price: 80,
-            image: "https://placehold.co/300",
-        },
-        {
-            id: 3,
-            name: "Smartphone X Pro",
-            price: 899,
-            image: "https://placehold.co/300",
-        },
-        {
-            id: 4,
-            name: "Digital Watch",
-            price: 150,
-            image: "https://placehold.co/300",
-        },
-    ];
 
     return (
         <section className="mx-6 my-8 mt-10">
@@ -40,7 +13,7 @@ export default function HomeProducts() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
                 {products.map(product => (
-                    <ProductCard key={product.id} product={product} />
+                    <ProductCard key={product._id} product={product} />
                 ))}
             </div>
         </section>

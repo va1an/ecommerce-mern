@@ -1,7 +1,7 @@
 import api from "./axios";
 
-export const getAllProducts = (category) => {
-    const url = category ? `/product/all-products?category=${category}` : "/product/all-products"
+export const getAllProducts = (category, pageNumber = 1) => {
+    const url = category ? `/product/all-products?category=${category}` : `/product/all-products?page=${pageNumber}&limit=10`
     return api.get(url);
 }
 

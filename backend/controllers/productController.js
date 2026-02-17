@@ -47,15 +47,22 @@ export const getAllProducts = async (req, res) => {
     try {
         const query = { isActive: true };
 
+        const page = Number(req.query.page) || 1;
+        const limit = Number(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+        const totalProducts = await Product.countDocuments();
+
         if (req.query.category) {
             query.category = req.query.category;
         }
 
-        const products = await Product.find(query).populate("category", "name").sort({ createdAt: -1 });
+        const products = await Product.find(query).populate("category", "name").sort({ createdAt: -1 }).skip(skip).limit(limit);
         res.status(200).json({
-            success: true,
-            products,
-            total: products.length
+            data: products,
+            currentPage: page,
+            totalPages: Math.ceil(totalProducts / limit),
+            totalItems: totalProducts,
+            limit
         });
     }
     catch (error) {

@@ -2,15 +2,20 @@ import { useEffect, useState } from "react"
 import toast from "react-hot-toast";
 import api from "../../api/axios";
 import Spinner from "../../components/Spinner";
+import Pagination from "../../components/Pagination";
 
 export default function AdminOrders() {
     const [orders, setOrders] = useState([]);
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
     const [loading, setLoading] = useState(true);
 
-    async function fetchOrders() {
+    async function fetchOrders(pageNumber = 1) {
         try {
-            const res = await api.get("/order/all-orders");
-            setOrders(res.data.orders);
+            const { data } = await api.get(`/order/all-orders?page=${pageNumber}&limit=2`);
+            setOrders(data.data);
+            setPage(data.currentPage);
+            setTotalPages(data.totalPages);
         }
         catch (error) {
             toast.error("Failed to fetch orders");
@@ -32,8 +37,8 @@ export default function AdminOrders() {
     }
 
     useEffect(() => {
-        fetchOrders();
-    }, []);
+        fetchOrders(page);
+    }, [page]);
 
     function getStatusColor(status) {
         switch (status) {
@@ -54,7 +59,6 @@ export default function AdminOrders() {
             {orders.length === 0 && (
                 <p className="font-inter text-gray-500">No orders found</p>
             )}
-            {console.log(orders)}
 
             {orders.map(order => (
                 <div key={order._id} className="bg-white shadow rounded-lg p-6 space-y-5">
@@ -114,6 +118,7 @@ export default function AdminOrders() {
                     </div>
                 </div>
             ))}
+            <Pagination page={page} totalPages={totalPages} onPageChange={(newPage) => setPage(newPage)} />
         </div>
     )
 }
