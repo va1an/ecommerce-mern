@@ -13,7 +13,7 @@ import dashboardRouter from "./routes/dashboardRoutes.js";
 
 const app = express();
 
-const allowedOrigins = ["http://localhost:5173"];
+const allowedOrigins = ["https://ecommerce-mern-tau-orpin.vercel.app"];
 
 app.use(cors({
     origin: allowedOrigins,

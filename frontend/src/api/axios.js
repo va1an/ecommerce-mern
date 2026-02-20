@@ -2,7 +2,7 @@ import axios from 'axios';
 import { clearAccessToken, getAccessToken, setAccessToken } from '../utils/token';
 
 const api = axios.create({
-    baseURL: "http://localhost:8080/api",
+    baseURL: "https://ecommerce-mern-2mjf.onrender.com/api",
     withCredentials: true
 });
 
