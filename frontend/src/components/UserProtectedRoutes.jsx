@@ -5,5 +5,5 @@ import toast from "react-hot-toast";
 export default function UserProtectedRoutes() {
     const { user } = useAuth();
 
-    return user ? <Outlet /> : <Navigate to={"/"} replace />
+    return user ? <Outlet /> : <Navigate to={"/login"} replace />
 }

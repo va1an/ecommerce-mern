@@ -1,7 +1,15 @@
 import api from "./axios";
 
-export const getAllProducts = (category, pageNumber = 1) => {
-    const url = category ? `/product/all-products?category=${category}` : `/product/all-products?page=${pageNumber}&limit=10`
+export const getAllProducts = (category, pageNumber = 1, search = "") => {
+    let url = `/product/all-products?page=${pageNumber}&limit=10`;
+
+    if (category) {
+        url += `&category=${category}`;
+    }
+
+    if (search) {
+        url += `&search=${search}`;
+    }
     return api.get(url);
 }
 

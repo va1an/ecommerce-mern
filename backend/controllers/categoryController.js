@@ -74,7 +74,7 @@ export const toggleCategory = async (req, res) => {
 
 export const deleteCategory = async (req, res) => {
     try {
-        const { id } = req.params.id;
+        const { id } = req.params;
 
         const productExists = await Product.exists({ category: id });
 

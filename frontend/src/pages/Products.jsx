@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import { getAllProducts } from "../api/product";
 import { getCategories } from "../api/category";
 import Spinner from "../components/Spinner";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import ProductCard from "../components/ProductCard";
 
 export default function Products() {
@@ -13,11 +13,15 @@ export default function Products() {
     const [loading, setLoading] = useState(true);
 
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+
+    const search = searchParams.get("search") || "";
+    const page = searchParams.get("page") || 1;
 
     async function fetchData() {
         try {
             const [productRes, categoryRes] = await Promise.all([
-                getAllProducts(selectedCategory),
+                getAllProducts(selectedCategory, page, search),
                 getCategories()
             ]);
 
@@ -34,7 +38,7 @@ export default function Products() {
 
     useEffect(() => {
         fetchData();
-    }, [selectedCategory]);
+    }, [selectedCategory, page, search]);
 
     return (
         <div className="px-6 py-6 bg-gray-100">
@@ -44,10 +48,10 @@ export default function Products() {
                 <aside className="w-64 bg-white p-4 rounded-lg shadow h-fit">
                     <h2 className="font-inter font-semibold mb-3">Categories</h2>
 
-                    <button onClick={() => setSelectedCategory("")} className={`block w-full text-left px-3 py-2 rounded mb-1 ${selectedCategory === "" ? "bg-blue-600 text-white" : "hover:bg-gray-100"}`}>All</button>
+                    <button onClick={() => { setSelectedCategory(""); navigate("/products") }} className={`block w-full text-left px-3 py-2 rounded mb-1 ${selectedCategory === "" ? "bg-blue-600 text-white" : "hover:bg-gray-100"}`}>All</button>
 
                     {categories.map((cat) => (
-                        <button key={cat._id} onClick={() => setSelectedCategory(cat._id)} className={`block w-full text-left px-3 py-2 rounded mb-1 cursor-pointer ${selectedCategory === cat._id ? "bg-blue-600 text-white" : "hover:bg-gray-100"}`}>{cat.name}</button>
+                        <button key={cat._id} onClick={() => { setSelectedCategory(cat._id); navigate("/products") }} className={`block w-full text-left px-3 py-2 rounded mb-1 cursor-pointer ${selectedCategory === cat._id ? "bg-blue-600 text-white" : "hover:bg-gray-100"}`}>{cat.name}</button>
                     ))}
                 </aside>
 

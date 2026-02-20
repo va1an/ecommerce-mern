@@ -52,6 +52,7 @@ export default function AdminCategories() {
             setCategories(prev => prev.filter(category => String(category._id) !== String(selectedCategoryId)));
             setSelectedCategoryId(null);
             setOpenModal(false);
+            toast.success("Category deleted")
         }
         catch (error) {
             toast.error("Category delete failed");
@@ -62,7 +63,7 @@ export default function AdminCategories() {
         fetchCategories();
     }, [])
 
-    if (categories.length === 0) return <p>No products found</p>
+    if (categories.length === 0) return <p>No categories found</p>
 
     return (
         <div className="p-6 rounded-lg">

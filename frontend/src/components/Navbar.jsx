@@ -3,11 +3,14 @@ import { useAuth } from "../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import { logoutUser } from "../api/auth";
 import { useCart } from "../context/CartContext";
+import { useEffect, useState } from "react";
+import api from "../api/axios";
 
 export default function Navbar() {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
     const { totalItems, clearCart } = useCart();
+    const [keyword, setKeyword] = useState("");
 
     async function handleLogout() {
         try {
@@ -20,13 +23,22 @@ export default function Navbar() {
         }
     }
 
+    function handleSearch() {
+        if (keyword.trim()) {
+            navigate(`/products?search=${keyword}`);
+            setKeyword("")
+        } else {
+            navigate('/products');
+        }
+    }
+
     return (
         <nav className="bg-white shadow px-6 py-4 flex items-center justify-between">
-            <h1 className="text-2xl font-inter font-bold text-blue-600">ShopEase</h1>
+            <h1 onClick={() => navigate('/')} className="text-2xl font-inter font-bold text-blue-600 cursor-pointer">ShopEase</h1>
 
             <div className="flex items-center gap-2 w-1/2">
-                <input type="text" placeholder="Search products..." className="w-full px-4 py-2 border border-gray-200 rounded-lg font-inter outline-none focus:ring-2 focus:ring-blue-500" />
-                <button className="bg-primaryButton text-white p-2 rounded-lg cursor-pointer"><Search /></button>
+                <input onChange={(e) => setKeyword(e.target.value)} type="text" value={keyword} placeholder="Search products..." className="w-full px-4 py-2 border border-gray-200 rounded-lg font-inter outline-none focus:ring-2 focus:ring-blue-500" />
+                <button onClick={handleSearch} className="bg-primaryButton text-white p-2 rounded-lg cursor-pointer"><Search /></button>
             </div>
 
             <div className="flex items-center gap-4">

@@ -49,7 +49,7 @@ export default function ProductDetails() {
     return (
         <div className="max-w-7xl mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-10">
             <div>
-                <img src={selectedImage} alt={product.name} className="w-full h-105 object-cover rounded-lg border" />
+                <img src={selectedImage} alt={product.name} className="w-full h-180 object-cover rounded-lg border" />
                 <div className="flex gap-3 mt-4">
                     {product.images.map((img) => (
                         <img key={img.public_id} src={img.url} onClick={() => setSelectedImage(img.url)} className={`w-20 h-20 object-cover rounded cursor-pointer border border-gray-100 ${selectedImage === img.url ? "ring-2 ring-primaryButton" : ""}`} />
