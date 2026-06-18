@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { getProductById } from "../api/product";
 import Spinner from "../components/Spinner";
 import api from "../api/axios";
 import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
 
 export default function ProductDetails() {
     const { id } = useParams();
@@ -13,6 +14,10 @@ export default function ProductDetails() {
     const [selectedImage, setSelectedImage] = useState("");
     const [qty, setqty] = useState(1);
     const [loading, setLoading] = useState(true);
+
+    const { user } = useAuth();
+
+    const navigate = useNavigate();
 
     const { addToCart } = useCart();
 
@@ -32,6 +37,9 @@ export default function ProductDetails() {
 
     async function handleAddToCart() {
         try {
+            if (!user) {
+                navigate("/login")
+            }
             await addToCart(product._id, qty);
             toast.success("Added to cart")
         }
