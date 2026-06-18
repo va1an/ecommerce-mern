@@ -72,7 +72,7 @@ export default function Checkout() {
                 {addresses.length === 0 ? (
                     <div className="border p-4 rounded text-center">
                         <p className="font-inter mb-3">You don't have any address yet</p>
-                        <button className="font-inter bg-primaryButton hover:bg-primaryHover text-white px-4 py-2 cursor-pointer rounded">Add Address</button>
+                        <button onClick={() => navigate("/profile/addresses")} className="font-inter bg-primaryButton hover:bg-primaryHover text-white px-4 py-2 cursor-pointer rounded">Add Address</button>
                     </div>
                 ) : (
                     addresses.map(addr => (
