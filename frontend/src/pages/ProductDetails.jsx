@@ -38,7 +38,7 @@ export default function ProductDetails() {
     async function handleAddToCart() {
         try {
             if (!user) {
-                navigate("/login")
+                return navigate("/login")
             }
             await addToCart(product._id, qty);
             toast.success("Added to cart")
